@@ -1,0 +1,153 @@
+[
+
+	{
+		"Name" : "Dresden Codak",
+		"Url" : "http://feeds2.feedburner.com/rsspect/fJur"
+	},
+    {
+        "Name": "Incidental Comics", 
+        "Url": "http://incidentalcomics.tumblr.com/rss",
+        "Warning": "Multiple images, comprising one comic, are sometimes placed into the same page or RSS item." 
+    }, 
+    {
+        "Url": "http://feeds.feedburner.com/ScenesFromAMultiverse?format=xml"
+    }, 
+    {
+        "Name": "Garfield Minus Garfield", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=f989b56b1fa7d5ca48b8e97e7ead20bf&_render=rss"
+    }, 
+    {
+        "Url": "http://catandgirl.com/?feed=rss2"
+    }, 
+    {
+        "Name": "Dr. McNinja", 
+        "Url": "http://drmcninja.com/feed/",
+        "ImgComment": "Title"
+    }, 
+    {
+        "Name" : "Gun Show",
+        "Url": "http://www.rsspect.com/rss/gunshowcomic.xml"
+    }, 
+    {
+        "Name": "Buttersafe", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=67151c56072ee580cdfacc8387828fc2&_render=rss"
+    }, 
+    {
+        "Name" : "Overcompensating",
+        "Url": "http://www.overcompensating.com/index.xml",
+        "ImgComment": "title"
+    }, 
+    {
+        "Name": "Formal Sweatpants", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=d44d9abc1bfc128a5dd92089af76f7d6&_render=rss"
+    }, 
+    {
+        "Url": "http://basicinstructions.net/basic-instructions/rss.xml"
+    }, 
+    {
+        "Name": "Diesel Sweeties", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=0a7ca72da037ce9d30738ff2bf0c0de8&_render=rss"
+    }, 
+    {
+        "Name": "Cyanide and Happiness", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=aff46f546582099f610fcdc3f89a2eba&_render=rss"
+    }, 
+    {
+        "Name": "Bug", 
+        "Url": "http://www.bugcomic.com/feed/"
+    }, 
+    {
+        "Name": "Amazing Super Powers", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=d6657e1c4a29e5ab389dffce3ba0e2f2&_render=rss"
+    }, 
+    {
+        "Name": "Invisible Bread", 
+        "Url": "http://feeds.feedburner.com/InvisibleBread?format=xml"
+    }, 
+    {
+        "Name": "Extra Fabulous Comics", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=4bf11c5c60f3e7571c73e9ef1dbb5fa9&_render=rss"
+    }, 
+    {
+        "Name": "Sticky Comics", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=0253daf68f128b88ac27535c5c6711f3&_render=rss"
+    }, 
+    {
+        "Name": "Doghouse Diaries", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=694dbb1262c3edafeba75e21b09283be&_render=rss"
+    }, 
+    {
+        "Name": "Moonbeard", 
+        "Url": "http://moonbeard.com/feed/rss/"
+    }, 
+    {
+        "Name": "Completely Serious Comics", 
+        "Url": "http://completelyseriouscomics.com/?feed=rss2"
+    }, 
+    {
+        "Name": "Channelate", 
+        "Url": "http://feeds.feedburner.com/Channelate?format=xml"
+    }, 
+    {
+        "Name": "Poorly Drawn Lines", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=b54e115be50128f476afc47e488518a1&_render=rss"
+    }, 
+    {
+        "Name": "Comics by Jim Benton", 
+        "Url": "http://www.jimbenton.com/page14/files/feed.xml"
+    }, 
+    {
+        "Name": "Endless Origami", 
+        "Url": "http://endlessorigami.com/feed/"
+    }, 
+    {
+        "Name" : "Bird And Moon",
+        "Url": "http://birdandmoon.tumblr.com/rss"
+    }, 
+    {
+        "Url": "http://www.littledee.net/?feed=rss",
+        "Warning" : "HTML chars in title need escaping: 03/27/13 â€“ Simple Arithmetic"
+    }, 
+    {
+        "Name" : "Johnny Wander",
+        "Url": "http://www.johnnywander.com/feed"
+    }, 
+    {
+        "Url": "http://nedroid.com/feed/",
+        "Warning" : "The <description> content is wrapped in CDATA tags."
+    }, 
+    {
+        "Name": "Saturday Morning Breakfast Cereal", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=baea31eb66e8cbafc0e3d320e8ed7809&_render=rss"
+    }, 
+    {
+        "Url": "http://www.xkcd.com/rss.xml"
+    }, 
+    {
+        "Name": "Dinosaur Comics", 
+        "Url": "http://www.rsspect.com/rss/qwantz.xml",
+        "ImgComment": "title"
+    }, 
+    {
+        "Name": "Wonderella", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=c38cac8bc6a326641e2b0616cb330768&_render=rss"
+    },
+    {
+        "Name": "The Oatmeal", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=a9d7535d5914015dabc2767d37bba90d&_render=rss"
+    }, 
+    {
+        "Name": "Eat More Bikes", 
+        "Url": "http://eatmorebikes.blogspot.com/feeds/posts/default?alt=rss"
+    }, 
+    {
+        "Name": "A Softer World", 
+        "Url": "http://www.rsspect.com/rss/asw.xml",
+        "ImgComment": "title"
+    }, 
+    {
+        "Name": "Indexed", 
+        "Url": "http://pipes.yahoo.com/pipes/pipe.run?_id=1b4dc30a67f992dadb9ff3937e65e0d3&_render=rss",
+        "Warning" : "Includes a ton of social network images in with the RSS item//description."
+    } 
+]

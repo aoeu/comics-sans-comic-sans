@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+}
+
+body {
+    background-color: rgb(245,245,245);
+}
+
+h1 {
+    font-family: Gill Sans;
+    font-size: 2.6em;
+    font-weight: normal; 
+    letter-spacing: 0.07em;
+    text-align: center;
+    text-shadow:
+        -1px -1px 0 black,  
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         2px  2px 0 black;
+}
+
+h2 {
+    color: black;
+    font-family: Monospace;
+    font-size: 1.0em;
+    font-weight: normal;
+    text-align: center;
+}
+
+h3 {
+    color: rgb(128,128,128);
+    font-family: Gill Sans;
+    font-size: 1.6em;
+    font-weight: normal;
+    margin: 1em;
+}
+
+img.image_file {
+    background: url("static/images/hour_glass.gif") center no-repeat;
+}
+
+p.datetime {
+    color: black;
+    font-family: Gill Sans;
+    font-size: 0.7em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+p.comment {
+    color: rgb(100,100,100);
+    font-family: Gill Sans;
+    font-size: 0.9em;
+    margin-right: 1em;
+    text-align: right;
+}
+
+div.nav {
+    float: center;
+    font-family: Monospace;
+    font-size: 1.0em;
+    margin-bottom: 0.3em;
+    margin-top: 0.3em;
+}
+
+div#title {
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+
+div.header {
+    background-color: gray;
+    border-bottom: 0.25em solid white;
+    border-top: 0.15em solid white;
+    color: rgb(245,245,245);
+    padding: 0.5em;
+}
+
+div.outline {
+    border-bottom: 0.1em solid black;
+    border-top: 0.1em solid black;
+}
+
+div.comic {
+    margin-bottom: 2em;
+}
+
+div.image {
+    background: url("static/images/hour_glass.gif") center no-repeat;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+div.nav {
+    color: white;
+    text-align: center;
+}
+
+div.nav a:link, a:visited, a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+span#page_title {
+    display: inline-block;
+    float: left;
+    font-family: Gill Sans;
+    font-size: 1.8em;
+    letter-spacing: -0.07em;
+    margin-bottom: 0;
+    margin-left: 0.5em;
+}
+
+span#page_desc {
+    display: block;
+    float: left;
+    font-family: Gill Sans;
+    font-size: 0.8em;
+    letter-spacing: -0.07em;
+    margin-bottom: 0;
+    margin-left: 0.5em;
+}
+
+span#logo {
+    display: block;
+    float: right;
+    height: 92px;
+    position: relative;
+}
+
+.header a:link, a:visited {
+    color: rgb(245,245,245);
+    text-decoration: none;
+}
+
+.header a:hover {
+    color: white;
+}
