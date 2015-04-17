@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"flag"
 	"github.com/PuerkitoBio/goquery"
 	"html/template"
 	"io/ioutil"
@@ -308,7 +309,10 @@ func check(err error) {
 	}
 }
 
+var port string 
 func main() {
+	flag.StringVar(&port, "port", ":8080", "The port to serve the page on.")
+	flag.Parse()
 	// Sanity check and construct template first.
 	tmplText, err := ioutil.ReadFile("static/template.html")
 	check(err)
@@ -338,5 +342,5 @@ func main() {
 	check(err)
 
 	// Serve the front-end and generated data.
-	panic(http.ListenAndServe(":8080", http.FileServer(http.Dir("."))))
+	panic(http.ListenAndServe(port, http.FileServer(http.Dir("."))))
 }
