@@ -37,6 +37,7 @@ h3 {
 
 img.image_file {
     background: url("static/images/hour_glass.gif") center no-repeat;
+    max-width: 90%;
 }
 
 p.datetime {
