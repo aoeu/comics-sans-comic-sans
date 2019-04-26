@@ -16,20 +16,6 @@
         "Url": "http://catandgirl.com/?feed=rss2"
     }, 
     {
-        "Name": "Dr. McNinja", 
-        "Url": "http://drmcninja.com/feed/",
-        "ImgComment": "Title"
-    }, 
-    {
-        "Name" : "Gun Show",
-        "Url": "http://www.rsspect.com/rss/gunshowcomic.xml"
-    }, 
-    {
-        "Name" : "Overcompensating",
-        "Url": "http://www.overcompensating.com/index.xml",
-        "ImgComment": "title"
-    }, 
-    {
         "Url": "http://basicinstructions.net/basic-instructions/rss.xml"
     }, 
     {
@@ -49,28 +35,8 @@
         "Url": "http://moonbeard.com/feed/rss/"
     }, 
     {
-        "Name": "Completely Serious Comics", 
-        "Url": "http://completelyseriouscomics.com/?feed=rss2"
-    }, 
-    {
-        "Name": "Channelate", 
-        "Url": "http://feeds.feedburner.com/Channelate?format=xml"
-    }, 
-    {
-        "Name": "Comics by Jim Benton", 
-        "Url": "http://www.jimbenton.com/page14/files/feed.xml"
-    }, 
-    {
-        "Name": "Endless Origami", 
-        "Url": "http://endlessorigami.com/feed/"
-    }, 
-    {
         "Name" : "Bird And Moon",
         "Url": "http://birdandmoon.tumblr.com/rss"
-    }, 
-    {
-        "Url": "http://www.littledee.net/?feed=rss",
-        "Warning" : "HTML chars in title need escaping: 03/27/13 â€“ Simple Arithmetic"
     }, 
     {
         "Name" : "Johnny Wander",
@@ -87,19 +53,5 @@
         "Name": "Dinosaur Comics", 
         "Url": "http://www.rsspect.com/rss/qwantz.xml",
         "ImgComment": "title"
-    }, 
-    {
-        "Name": "Eat More Bikes", 
-        "Url": "http://eatmorebikes.blogspot.com/feeds/posts/default?alt=rss"
-    }, 
-    {
-        "Name": "A Softer World", 
-        "Url": "http://www.rsspect.com/rss/asw.xml",
-        "ImgComment": "title"
-    }, 
-    {
-	"Name": "Abstruse Goose",
-	"Url": "http://feeds.feedburner.com/AbstruseGoose",
-	"ImgComment": "title"
     }
 ]
