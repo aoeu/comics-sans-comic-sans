@@ -1,9 +1,10 @@
 package main
 
 import (
+	"io"
 	"bytes"
-	"code.google.com/p/go-charset/charset"
-	"code.google.com/p/go.net/html"
+	"golang.org/x/net/html/charset"
+	"golang.org/x/net/html"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -112,7 +113,11 @@ func (c *ComicMetaData) downloadUrl(wg *sync.WaitGroup) {
 	}
 	rss := new(RSS)
 	decoder := xml.NewDecoder(bytes.NewReader(body))
-	decoder.CharsetReader = charset.NewReader
+	decoder.CharsetReader = func(contentType string, in io.Reader) (out io.Reader, err error) {
+		// Over the years, the arugment order has flipped.
+		out, err = charset.NewReader(in, contentType)
+		return out, err
+	}
 	err = decoder.Decode(rss)
 	if err != nil {
 		log.Println("Problem unmarshalling XML for", c.Url, err)
