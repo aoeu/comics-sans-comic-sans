@@ -227,9 +227,9 @@ func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 		if len(comic.Comics) != 0 {
 			comics = append(comics, comic)
 		} else {
-			log.Printf("Error with %s, no actual comics in feed.\n", comic.SiteUrl)
+			log.Printf("Error with %s, no actual comics in feed.\n", md.Name)
 			if err != nil {
-				log.Printf("Received error %s for %s", err, comic.SiteUrl)
+				log.Printf("Received error for %s: %v", md.Name, err)
 			}
 		}
 	}
