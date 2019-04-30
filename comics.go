@@ -47,7 +47,7 @@ type Item struct {
 type Comic struct {
 	Title        string
 	Link         string
-	ImageUrl     string
+	ImageURL     string
 	ImageComment string
 	Date         string
 	UnixDate     int64
@@ -68,7 +68,7 @@ func (c *Comic) sanitize() {
 // Data structure for multiple comics published by a single site or author.
 type ComicSeries struct {
 	SeriesTitle string
-	SiteUrl     string
+	SiteURL     string
 	Description string
 	Index       int // For the front-end to keep track of Comic to display.
 	Comics      []Comic
@@ -90,21 +90,22 @@ func (c *ComicSeries) sanitize() {
 
 // Data structure for meta data relevant to obtaining a Comic or ComicSeries.
 type ComicMetaData struct {
-	Url        string
+	URL        string
 	ImgAttrs   map[string]string
 	ImgComment string
 	Name       string
+	Category   string 
 	RSSFeed    *RSS
 }
 
 // Requests data from a URL and stores response data.
-func (c *ComicMetaData) downloadUrl(wg *sync.WaitGroup) {
-	resp, err := http.Get(c.Url)
+func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
+	resp, err := http.Get(c.URL)
 	if err != nil {
 		log.Println("Did not receive HTTP GET response: ", err)
 	}
 	if resp.StatusCode != 200 {
-		log.Printf("Bad HTTP Response %d for %s\n", resp.StatusCode, c.Url)
+		log.Printf("Bad HTTP Response %d for %s\n", resp.StatusCode, c.URL)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -120,7 +121,7 @@ func (c *ComicMetaData) downloadUrl(wg *sync.WaitGroup) {
 	}
 	err = decoder.Decode(rss)
 	if err != nil {
-		log.Println("Problem unmarshalling XML for", c.Url, err)
+		log.Println("Problem unmarshalling XML for", c.URL, err)
 	}
 	c.RSSFeed = rss
 	wg.Done()
@@ -177,8 +178,8 @@ func getComic(item Item, commentAttrName string) (c Comic, err error) {
 		return Comic{}, err
 	}
 	doc.Find("img").Each(func(i int, img *goquery.Selection) {
-		if c.ImageUrl == "" {
-			c.ImageUrl, _ = img.Attr("src")
+		if c.ImageURL == "" {
+			c.ImageURL, _ = img.Attr("src")
 			c.ImageComment, _ = img.Attr(commentAttrName)
 		} else {
 			return // Keep going until we set any image.
@@ -195,7 +196,7 @@ func getComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	}
 	series := new(ComicSeries)
 	series.SeriesTitle = feed.Channel.Title
-	series.SiteUrl = feed.Channel.Link
+	series.SiteURL = feed.Channel.Link
 	series.Description = feed.Channel.Description
 	series.Index = 0
 	lastBuildDate := feed.Channel.LastBuildDate
@@ -241,7 +242,7 @@ func downloadFeeds(config []*ComicMetaData) {
 	var wg sync.WaitGroup
 	for _, c := range config {
 		wg.Add(1)
-		go c.downloadUrl(&wg)
+		go c.downloadURL(&wg)
 	}
 	wg.Wait()
 }

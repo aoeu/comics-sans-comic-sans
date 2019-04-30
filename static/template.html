@@ -20,7 +20,7 @@
 <div class="comic" id="comic_{{$i}}">
     <div class="outline">
         <div class="header" id="header_{{$i}}">
-            <h1><a href="{{$series.SiteUrl}}">{{.SeriesTitle}}</a></h1>
+            <h1><a href="{{$series.SiteURL}}">{{.SeriesTitle}}</a></h1>
             <h2>{{.Description}}</h2>
             <div class="nav">
                 <a href="#comic_{{incr $i}}">&#9660;</a>
@@ -37,7 +37,7 @@
             <img class="image_file" 
                 id="img_{{$i}}" 
                 alt="{{$comic.ImageComment}}" 
-                src="{{$comic.ImageUrl}}" />
+                src="{{$comic.ImageURL}}" />
         </a>
     </div> <!--/image-->
     <p class="comment" id="comment_{{$i}}">{{$comic.ImageComment}}</p> {{end}} {{end}}

@@ -23,7 +23,7 @@ function redraw(series, seriesID) {
     var dateText = comic.PubMsg + " " + comic.Date;
     $('#date_'    + seriesID).text(dateText);
     $('#link_'    + seriesID).attr('href', comic.Link);
-    $('#img_'     + seriesID).attr('src', comic.ImageUrl);
+    $('#img_'     + seriesID).attr('src', comic.ImageURL);
 
     $('#title_' + seriesID).fadeOut(333, function() {
         $('#title_'   + seriesID).text(comic.Title);

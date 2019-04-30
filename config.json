@@ -1,49 +1,49 @@
 [
     {
         "Name": "Incidental Comics", 
-        "Url": "http://incidentalcomics.tumblr.com/rss",
+        "URL": "http://incidentalcomics.tumblr.com/rss",
         "Warning": "Multiple images, comprising one comic, are sometimes placed into the same page or RSS item." 
     }, 
     {
-        "Url": "http://feeds.feedburner.com/ScenesFromAMultiverse?format=xml"
+        "URL": "http://feeds.feedburner.com/ScenesFromAMultiverse?format=xml"
     }, 
     {
-        "Url": "http://catandgirl.com/?feed=rss2"
+        "URL": "http://catandgirl.com/?feed=rss2"
     }, 
     {
         "Name": "Diesel Sweeties", 
-        "Url": "http://www.dieselsweeties.com/ds-unifeed.xml"
+        "URL": "http://www.dieselsweeties.com/ds-unifeed.xml"
     }, 
     {
         "Name": "Bug", 
-        "Url": "http://www.bugcomic.com/feed/"
+        "URL": "http://www.bugcomic.com/feed/"
     }, 
     {
         "Name": "Invisible Bread", 
-        "Url": "http://feeds.feedburner.com/InvisibleBread?format=xml"
+        "URL": "http://feeds.feedburner.com/InvisibleBread?format=xml"
     }, 
     {
         "Name": "Moonbeard", 
-        "Url": "http://moonbeard.com/feed/rss/"
+        "URL": "http://moonbeard.com/feed/rss/"
     }, 
     {
         "Name" : "Bird And Moon",
-        "Url": "http://birdandmoon.tumblr.com/rss"
+        "URL": "http://birdandmoon.tumblr.com/rss"
     }, 
     {
         "Name" : "Johnny Wander",
-        "Url": "http://www.johnnywander.com/feed"
+        "URL": "http://www.johnnywander.com/feed"
     }, 
     {
-        "Url": "http://nedroid.com/feed/",
+        "URL": "http://nedroid.com/feed/",
         "Warning" : "The <description> content is wrapped in CDATA tags."
     }, 
     {
-        "Url": "http://www.xkcd.com/rss.xml"
+        "URL": "http://www.xkcd.com/rss.xml"
     }, 
     {
         "Name": "Dinosaur Comics", 
-        "Url": "http://www.rsspect.com/rss/qwantz.xml",
+        "URL": "http://www.rsspect.com/rss/qwantz.xml",
         "ImgComment": "title"
     }
 ]
