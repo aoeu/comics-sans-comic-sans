@@ -1,9 +1,4 @@
 [
-
-	{
-		"Name" : "Dresden Codak",
-		"Url" : "http://feeds2.feedburner.com/rsspect/fJur"
-	},
     {
         "Name": "Incidental Comics", 
         "Url": "http://incidentalcomics.tumblr.com/rss",
@@ -14,9 +9,6 @@
     }, 
     {
         "Url": "http://catandgirl.com/?feed=rss2"
-    }, 
-    {
-        "Url": "http://basicinstructions.net/basic-instructions/rss.xml"
     }, 
     {
         "Name": "Diesel Sweeties", 
