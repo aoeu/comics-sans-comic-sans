@@ -328,7 +328,7 @@ var port string
 func main() {
 	flag.StringVar(&port, "port", ":8080", "The port to serve the page on.")
 	flag.Parse()
-	// Sanity check and construct template first.
+
 	tmplText, err := ioutil.ReadFile("static/template.html")
 	check(err)
 	tmplString := string(tmplText)
@@ -336,26 +336,21 @@ func main() {
 	tmpl, err := template.New("comics").Funcs(funcMap).Parse(tmplString)
 	check(err)
 
-	// Set up configuration.
 	metaData := parseConfig("config.json")
 
-	// Download and parse feeds.
 	downloadFeeds(metaData)
 	comics := parseFeeds(metaData)
 
-	// Sort and output results.
 	outputFile, err := os.Create("index.html")
 	check(err)
 	comics = reverse(quickSort(comics))
 	err = tmpl.Execute(outputFile, comics)
 	check(err)
 
-	// Output data into JSON file for use by the front end.
 	jsonData, err := json.Marshal(comics)
 	check(err)
 	err = ioutil.WriteFile("comics.json", jsonData, 0644)
 	check(err)
 
-	// Serve the front-end and generated data.
 	panic(http.ListenAndServe(port, http.FileServer(http.Dir("."))))
 }
