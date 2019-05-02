@@ -1,16 +1,16 @@
 package main
 
 import (
-	"io"
 	"bytes"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/net/html"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"flag"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/net/html"
+	"golang.org/x/net/html/charset"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -99,7 +99,7 @@ type ComicMetaData struct {
 	ImgAttrs   map[string]string
 	ImgComment string
 	Name       string
-	Category   string 
+	Category   string
 	RSSFeed    *RSS
 }
 
