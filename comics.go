@@ -128,7 +128,7 @@ func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
 }
 
 // Calculates, formats, and returns time information about an RSS <pubDate>.
-func getDateData(pubDate string) (
+func parseDateData(pubDate string) (
 	newPubDate string, unixDate int64, pubMsg string, err error) {
 	dateTime, err := time.Parse(time.RFC1123Z, pubDate)
 	if err != nil {
@@ -164,10 +164,10 @@ func lastUpdate(then, now int64) (lastUpdate string) {
 }
 
 // Obtains Comic data from a single RSS <item> node.
-func getComic(item Item, commentAttrName string) (c Comic, err error) {
+func parseComic(item Item, commentAttrName string) (c Comic, err error) {
 	c = Comic{Title: item.Title, Link: item.Link}
 	// TODO: Why ignore error?
-	c.Date, c.UnixDate, c.PubMsg, _ = getDateData(item.PubDate)
+	c.Date, c.UnixDate, c.PubMsg, _ = parseDateData(item.PubDate)
 	//item.Description = html.EscapeString(item.Description)
 	node, err := html.Parse(strings.NewReader(item.Description))
 	if err != nil {
@@ -190,7 +190,7 @@ func getComic(item Item, commentAttrName string) (c Comic, err error) {
 }
 
 // Obtains an entire series of Comics from an RSS feed.
-func getComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
+func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	if commentAttrName == "" {
 		commentAttrName = "alt"
 	}
@@ -202,13 +202,13 @@ func getComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	lastBuildDate := feed.Channel.LastBuildDate
 	var comics []Comic
 	for _, item := range feed.Channel.Items {
-		comic, err := getComic(item, commentAttrName)
+		comic, err := parseComic(item, commentAttrName)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
 		if comic.UnixDate < 0 { // Hack: Some comics don't have pubDate on items.
-			comic.Date, comic.UnixDate, comic.PubMsg, _ = getDateData(lastBuildDate)
+			comic.Date, comic.UnixDate, comic.PubMsg, _ = parseDateData(lastBuildDate)
 		}
 		comics = append(comics, comic)
 	}
@@ -221,7 +221,7 @@ func getComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 	for _, md := range metaData {
 		var comic ComicSeries
-		comic, err := getComicSeries(md.RSSFeed, md.ImgComment)
+		comic, err := parseComicSeries(md.RSSFeed, md.ImgComment)
 		if md.Name != "" {
 			comic.SeriesTitle = md.Name
 		}
