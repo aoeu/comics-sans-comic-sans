@@ -20,6 +20,7 @@ import (
 	"time"
 )
 
+// An RSS represents an RSS feed read from an XML file.
 type RSS struct {
 	Version string `xml:"version,attr"`
 	// Using shorthand of just "Channel" doesn't work here, e.g.
@@ -27,6 +28,7 @@ type RSS struct {
 	Channel Channel `xml:"channel"`
 }
 
+// A Channel represents the contents of an RSS channel ("feed").
 type Channel struct {
 	Title         string `xml:"title"`
 	Link          string `xml:"link"`
@@ -35,6 +37,7 @@ type Channel struct {
 	Items         []Item `xml:"item"`
 }
 
+// An Item represents a single item from an RSS channel.
 type Item struct {
 	Title       string `xml:"title"`
 	Link        string `xml:"link"`
@@ -43,7 +46,7 @@ type Item struct {
 	PubDate     string `xml:"pubDate"`
 }
 
-// Data structure for representing a single web comic image and related data.
+// A Comic represents a single webcomic image and related metadata.
 type Comic struct {
 	Title        string
 	Link         string
@@ -54,7 +57,7 @@ type Comic struct {
 	PubMsg       string
 }
 
-// Sets questionable data member values to preferred defaults.
+// sanitize sets fields of a Comic to preferred defaults.
 func (c *Comic) sanitize() {
 	if (*c).Title == "." { // Hack: yahoo pipes will not allow blank title.
 		(*c).Title = ""
@@ -65,7 +68,8 @@ func (c *Comic) sanitize() {
 	}
 }
 
-// Data structure for multiple comics published by a single site or author.
+// A ComicSeries represents multiple webcomics published by a single site
+// or author.
 type ComicSeries struct {
 	SeriesTitle string
 	SiteURL     string
@@ -74,7 +78,7 @@ type ComicSeries struct {
 	Comics      []Comic
 }
 
-// Sets questionable data member values to preferred defaults.
+// sanitize sets fields of a ComicSeries to preferred defaults.
 func (c *ComicSeries) sanitize() {
 	// Hacks to accomodate bogus data values from yahoo pipes.
 	if (*c).Description == "." || (*c).Description == "Pipes Output" {
@@ -88,7 +92,8 @@ func (c *ComicSeries) sanitize() {
 	}
 }
 
-// Data structure for meta data relevant to obtaining a Comic or ComicSeries.
+// A ComicMetaData represents metadata used for fetching and parsing a
+// ComicSeries and its Comics.
 type ComicMetaData struct {
 	URL        string
 	ImgAttrs   map[string]string
@@ -98,7 +103,7 @@ type ComicMetaData struct {
 	RSSFeed    *RSS
 }
 
-// Requests data from a URL and stores response data.
+// downloadURL requests RSS with a URL and stores response.
 func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
 	resp, err := http.Get(c.URL)
 	if err != nil {
@@ -127,7 +132,8 @@ func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-// Calculates, formats, and returns time information about an RSS <pubDate>.
+// parseDateData calculates, formats, and returns time information about an
+// RSS "pubDate" node.
 func parseDateData(pubDate string) (
 	newPubDate string, unixDate int64, pubMsg string, err error) {
 	dateTime, err := time.Parse(time.RFC1123Z, pubDate)
@@ -141,7 +147,7 @@ func parseDateData(pubDate string) (
 	return
 }
 
-// Creates an English sentence stating how much time has elapsed
+// lastUpdate creates an English sentence stating how much time has elapsed
 // between 2 points in Unix time.
 func lastUpdate(then, now int64) (lastUpdate string) {
 	var hourLength int64 = 60 * 60
@@ -163,7 +169,7 @@ func lastUpdate(then, now int64) (lastUpdate string) {
 	return
 }
 
-// Obtains Comic data from a single RSS <item> node.
+// parseComic obtains Comic data from a single RSS <item> node.
 func parseComic(item Item, commentAttrName string) (c Comic, err error) {
 	c = Comic{Title: item.Title, Link: item.Link}
 	// TODO: Why ignore error?
@@ -189,7 +195,7 @@ func parseComic(item Item, commentAttrName string) (c Comic, err error) {
 	return
 }
 
-// Obtains an entire series of Comics from an RSS feed.
+// parseComicSeries parses an entire series of Comics from an RSS feed.
 func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	if commentAttrName == "" {
 		commentAttrName = "alt"
@@ -217,7 +223,7 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	return *series, nil
 }
 
-// Obtains ComicSeries data for each RSS feed (represented by meta data).
+// parseFeeds obtains ComicSeries data for each RSS feed via ComicMetaData.
 func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 	for _, md := range metaData {
 		var comic ComicSeries
@@ -237,7 +243,8 @@ func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 	return
 }
 
-// Helper method for concurrently domnloading RSS feed data from a URL.
+// downloadFeeds concurrently downloads and sets RSS feed data for sent
+// ComicMetaData.
 func downloadFeeds(config []*ComicMetaData) {
 	var wg sync.WaitGroup
 	for _, c := range config {
@@ -247,8 +254,8 @@ func downloadFeeds(config []*ComicMetaData) {
 	wg.Wait()
 }
 
-// Parses a configuration file specifying RSS feeds and
-// constructs meta data to represent them.
+// parseConfig reads a configuration file specifying RSS feeds and
+// constructs ComicMetaData structs to represent them.
 func parseConfig(configFileName string) []*ComicMetaData {
 	data, _ := ioutil.ReadFile(configFileName)
 	var config []ComicMetaData
@@ -260,8 +267,8 @@ func parseConfig(configFileName string) []*ComicMetaData {
 	return ptrs
 }
 
-// A basic quicksort algorithm for sorting a ComicSeries by
-// chronological order for the publishing date.
+// quickSort is abasic quicksort algorithm for sorting a ComicSeries by
+// chronological order of the publication date.
 func quickSort(series []ComicSeries) []ComicSeries {
 	length := len(series)
 	if length < 2 {
@@ -294,7 +301,7 @@ func quickSort(series []ComicSeries) []ComicSeries {
 	return result
 }
 
-// Reverses the sort order of a ComicSeries.
+// reverse reverses the sort order of a ComicSeries.
 func reverse(series []ComicSeries) []ComicSeries {
 	j := len(series) - 1
 	result := make([]ComicSeries, len(series))
@@ -304,18 +311,20 @@ func reverse(series []ComicSeries) []ComicSeries {
 	return result
 }
 
-// Functions for use in the HTML template.
+// incr increments a number and is only meant for use in the HTML template.
 func incr(n int) string { return fmt.Sprintf("%d", n+1) }
+
+// decr increments a number and is only meant for use in the HTML template.
 func decr(n int) string { return fmt.Sprintf("%d", n-1) }
 
-// For use in main. Exit fast and loudly if something goes wrong.
+// check logs an error and exits if the sent error is not nil.
 func check(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-var port string 
+var port string
 func main() {
 	flag.StringVar(&port, "port", ":8080", "The port to serve the page on.")
 	flag.Parse()
