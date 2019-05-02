@@ -103,11 +103,13 @@ type ComicMetaData struct {
 	RSSFeed    *RSS
 }
 
-// downloadURL requests RSS with a URL and stores response.
-func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
-	resp, err := http.Get(c.URL)
+// downloadFeed requests an RSS feed with a URL and stores response as a field.
+func (c *ComicMetaData) downloadFeed(wg *sync.WaitGroup) {
+	defer wg.Done()
+	resp, err := download(c.URL, "2s") // TODO(aoeu): Make timeout configurable?
 	if err != nil {
 		log.Println("Did not receive HTTP GET response: ", err)
+		return
 	}
 	if resp.StatusCode != 200 {
 		log.Printf("Bad HTTP Response %d for %s\n", resp.StatusCode, c.URL)
@@ -129,7 +131,33 @@ func (c *ComicMetaData) downloadURL(wg *sync.WaitGroup) {
 		log.Println("Problem unmarshalling XML for", c.URL, err)
 	}
 	c.RSSFeed = rss
-	wg.Done()
+}
+
+func download(url, timeoutLen string) (*http.Response, error) {
+	timeout, err := time.ParseDuration(timeoutLen)
+	if err != nil {
+		s := "could not download URL '%v' due to invalide timeout len: %v"
+		return nil, fmt.Errorf(s, url, timeoutLen)
+	}
+	responses := make(chan *http.Response)
+	errors := make(chan error)
+	go func() {
+		resp, err := http.Get(url)
+		if err != nil {
+			errors <- err
+			return
+		}
+		responses <- resp
+	}()
+	select {
+	case r := <-responses:
+		return r, nil
+	case err := <-errors:
+		return nil, err
+	case <-time.After(timeout):
+		s := "the URL '%v' did not download after %v"
+		return nil, fmt.Errorf(s, url, timeout)
+	}
 }
 
 // parseDateData calculates, formats, and returns time information about an
@@ -226,6 +254,9 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 // parseFeeds obtains ComicSeries data for each RSS feed via ComicMetaData.
 func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 	for _, md := range metaData {
+		if md.RSSFeed == nil {
+			continue // TODO(aoeu): Is there a better approach?
+		}
 		var comic ComicSeries
 		comic, err := parseComicSeries(md.RSSFeed, md.ImgComment)
 		if md.Name != "" {
@@ -249,7 +280,7 @@ func downloadFeeds(config []*ComicMetaData) {
 	var wg sync.WaitGroup
 	for _, c := range config {
 		wg.Add(1)
-		go c.downloadURL(&wg)
+		go c.downloadFeed(&wg)
 	}
 	wg.Wait()
 }
