@@ -12,6 +12,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -358,6 +360,8 @@ func check(err error) {
 	}
 }
 
+const outputFilename = "index.html"
+
 var port string
 
 func main() {
@@ -377,7 +381,7 @@ func main() {
 	downloadFeeds(metaData)
 	comics := parseFeeds(metaData)
 
-	outputFile, err := os.Create("index.html")
+	outputFile, err := os.Create(outputFilename)
 	check(err)
 	comics = reverse(quickSort(comics))
 	err = tmpl.Execute(outputFile, comics)
@@ -388,5 +392,24 @@ func main() {
 	err = ioutil.WriteFile("comics.json", jsonData, 0644)
 	check(err)
 
-	panic(http.ListenAndServe(port, http.FileServer(http.Dir("."))))
+	switch runtime.GOOS {
+	case "linux":
+		if err := exec.Command("xdg-open", outputFilename).Run(); err != nil {
+			log.Fatal(err)
+		}
+	case "darwin":
+		if err := exec.Command("open", outputFilename).Run(); err != nil {
+			log.Fatal(err)
+		}
+	case "windows":
+		if err := exec.Command("start", outputFilename).Run(); err != nil {
+			log.Fatal(err)
+		}
+	default:
+		fmt.Printf("open a web browser and navigate to http://localhost%v\n", port)
+		f := http.FileServer(http.Dir("."))
+		if err := http.ListenAndServe(port, f); err != nil {
+			log.Fatal(err)
+		}
+	}
 }
