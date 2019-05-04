@@ -92,9 +92,9 @@ func (c *ComicSeries) sanitize() {
 	}
 }
 
-// A ComicMetaData represents metadata used for fetching and parsing a
+// A ComicMetadata represents metadata used for fetching and parsing a
 // ComicSeries and its Comics.
-type ComicMetaData struct {
+type ComicMetadata struct {
 	URL        string
 	ImgAttrs   map[string]string
 	ImgComment string
@@ -104,7 +104,7 @@ type ComicMetaData struct {
 }
 
 // downloadFeed requests an RSS feed with a URL and stores response as a field.
-func (c *ComicMetaData) downloadFeed(wg *sync.WaitGroup) {
+func (c *ComicMetadata) downloadFeed(wg *sync.WaitGroup) {
 	defer wg.Done()
 	resp, err := download(c.URL, "5s") // TODO(aoeu): Make timeout configurable?
 	if err != nil {
@@ -252,7 +252,7 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 }
 
 // parseFeeds obtains ComicSeries data for each RSS feed via ComicMetaData.
-func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
+func parseFeeds(metaData []*ComicMetadata) (comics []ComicSeries) {
 	for _, md := range metaData {
 		if md.RSSFeed == nil {
 			continue // TODO(aoeu): Is there a better approach?
@@ -276,7 +276,7 @@ func parseFeeds(metaData []*ComicMetaData) (comics []ComicSeries) {
 
 // downloadFeeds concurrently downloads and sets RSS feed data for sent
 // ComicMetaData.
-func downloadFeeds(config []*ComicMetaData) {
+func downloadFeeds(config []*ComicMetadata) {
 	var wg sync.WaitGroup
 	for _, c := range config {
 		wg.Add(1)
@@ -287,14 +287,14 @@ func downloadFeeds(config []*ComicMetaData) {
 
 // parseConfig reads a configuration file specifying RSS feeds and
 // constructs ComicMetaData structs to represent them.
-func parseConfig(configFileName string) ([]*ComicMetaData, error) {
+func parseConfig(configFileName string) ([]*ComicMetadata, error) {
 	data, err := ioutil.ReadFile(configFileName)
 	if err != nil {
-		return []*ComicMetaData{}, fmt.Errorf("error opening '%v': %v", configFileName, err)
+		return []*ComicMetadata{}, fmt.Errorf("error opening '%v': %v", configFileName, err)
 	}
-	var config []ComicMetaData
+	var config []ComicMetadata
 	json.Unmarshal(data, &config)
-	var ptrs []*ComicMetaData
+	var ptrs []*ComicMetadata
 	for i, _ := range config {
 		ptrs = append(ptrs, &config[i])
 	}
