@@ -6,9 +6,6 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	"golang.org/x/net/html"
-	"golang.org/x/net/html/charset"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -18,6 +15,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/net/html"
+	"golang.org/x/net/html/charset"
 )
 
 // An RSS represents an RSS feed read from an XML file.
@@ -358,6 +359,7 @@ func check(err error) {
 }
 
 var port string
+
 func main() {
 	flag.StringVar(&port, "port", ":8080", "The port to serve the page on.")
 	flag.Parse()
