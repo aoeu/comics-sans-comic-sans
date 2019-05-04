@@ -314,9 +314,9 @@ func parseConfig(filepath string) (out []*ComicMetadata, err error) {
 	return out, nil
 }
 
-// quickSort is abasic quicksort algorithm for sorting a ComicSeries by
-// chronological order of the publication date.
-func quickSort(in []ComicSeries) (out []ComicSeries) {
+// sortByPubDate sorts a ComicSeries by chronological order of the publication
+// date via a basic quicksort algorithm implementation.
+func sortByPubDate(in []ComicSeries) (out []ComicSeries) {
 	length := len(in)
 	if length < 2 {
 		return in
@@ -342,9 +342,9 @@ func quickSort(in []ComicSeries) (out []ComicSeries) {
 	}
 	lesserLen := len(lesser)
 	out = make([]ComicSeries, lesserLen+1+len(greater))
-	copy(out, quickSort(lesser))
+	copy(out, sortByPubDate(lesser))
 	copy(out[lesserLen:], in[pivot:pivot+1])
-	copy(out[lesserLen+1:], quickSort(greater))
+	copy(out[lesserLen+1:], sortByPubDate(greater))
 	return out
 }
 
@@ -395,7 +395,7 @@ func main() {
 
 	outputFile, err := os.Create(outputFilename)
 	check(err)
-	comics = reverse(quickSort(comics))
+	comics = reverse(sortByPubDate(comics))
 	err = tmpl.Execute(outputFile, comics)
 	check(err)
 
