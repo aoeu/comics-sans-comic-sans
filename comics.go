@@ -9,7 +9,6 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -107,20 +106,22 @@ type ComicMetadata struct {
 }
 
 // downloadFeed requests an RSS feed with a URL and stores response as a field.
-func (c *ComicMetadata) downloadFeed(wg *sync.WaitGroup) {
+func (c *ComicMetadata) downloadFeed(wg *sync.WaitGroup, errs chan error) {
 	defer wg.Done()
 	resp, err := download(c.URL, "5s") // TODO(aoeu): Make timeout configurable?
 	if err != nil {
-		log.Println("Did not receive HTTP GET response: ", err)
+		errs <- fmt.Errorf("did not receive HTTP GET response: %v", err)
 		return
 	}
 	if resp.StatusCode != 200 {
-		log.Printf("Bad HTTP Response %d for %s\n", resp.StatusCode, c.URL)
+		errs <- fmt.Errorf("bad HTTP Response %d for %s\n", resp.StatusCode, c.URL)
+		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		errs <- fmt.Errorf("could not read response body: %v\n", err)
+		return
 	}
 	rss := new(RSS)
 	decoder := xml.NewDecoder(bytes.NewReader(body))
@@ -131,7 +132,8 @@ func (c *ComicMetadata) downloadFeed(wg *sync.WaitGroup) {
 	}
 	err = decoder.Decode(rss)
 	if err != nil {
-		log.Println("Problem unmarshalling XML for", c.URL, err)
+		errs <- fmt.Errorf("problem unmarshalling XML in response of '%v': %v", c.URL, err)
+		return
 	}
 	c.RSSFeed = rss
 }
@@ -241,7 +243,7 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	for _, item := range feed.Channel.Items {
 		comic, err := parseComic(item, commentAttrName)
 		if err != nil {
-			log.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 			continue
 		}
 		if comic.UnixDate < 0 { // Hack: Some comics don't have pubDate on items.
@@ -269,9 +271,9 @@ func parseFeeds(metaData []*ComicMetadata) (comics []ComicSeries) {
 		if len(comic.Comics) != 0 {
 			comics = append(comics, comic)
 		} else {
-			log.Printf("Error with %s, no actual comics in feed.\n", md.Name)
+			fmt.Fprintf(os.Stderr, "no actual comics in feed: %v\n", md.Name)
 			if err != nil {
-				log.Printf("Received error for %s: %v", md.Name, err)
+				fmt.Fprintf(os.Stderr, "received error for %s: %v", md.Name, err)
 			}
 		}
 	}
@@ -282,10 +284,17 @@ func parseFeeds(metaData []*ComicMetadata) (comics []ComicSeries) {
 // ComicMetaData.
 func downloadFeeds(config []*ComicMetadata) {
 	var wg sync.WaitGroup
+	errs := make(chan error)
+	defer close(errs)
 	for _, c := range config {
 		wg.Add(1)
-		go c.downloadFeed(&wg)
+		go c.downloadFeed(&wg, errs)
 	}
+	go func() {
+		for err := range errs {
+			fmt.Fprintln(os.Stderr, err)
+		}
+	}()
 	wg.Wait()
 }
 
@@ -313,7 +322,7 @@ func quickSort(series []ComicSeries) []ComicSeries {
 	}
 	defer func() {
 		if err := recover(); err != nil {
-			log.Println("quickSort failed: ", err)
+			fmt.Fprintf(os.Stderr, "quickSort failed: %v\n", err)
 		}
 	}()
 	pivot := (length / 2) - 1
@@ -357,7 +366,8 @@ func decr(n int) string { return fmt.Sprintf("%d", n-1) }
 // check logs an error and exits if the sent error is not nil.
 func check(err error) {
 	if err != nil {
-		log.Fatal(err)
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }
 
@@ -393,24 +403,29 @@ func main() {
 	err = ioutil.WriteFile("comics.json", jsonData, 0644)
 	check(err)
 
+	s := "could not get OS to open '%v': %v\n"
 	switch runtime.GOOS {
 	case "linux":
 		if err := exec.Command("xdg-open", outputFilename).Run(); err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, s, outputFilename, err)
+			os.Exit(1)
 		}
 	case "darwin":
 		if err := exec.Command("open", outputFilename).Run(); err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, s, outputFilename, err)
+			os.Exit(1)
 		}
 	case "windows":
 		if err := exec.Command("start", outputFilename).Run(); err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, s, outputFilename, err)
+			os.Exit(1)
 		}
 	default:
 		fmt.Printf("open a web browser and navigate to http://localhost%v\n", port)
 		f := http.FileServer(http.Dir("."))
 		if err := http.ListenAndServe(port, f); err != nil {
-			log.Fatal(err)
+			fmt.Fprintf(os.Stderr, "could not locally serve results: %v", err)
+			os.Exit(1)
 		}
 	}
 }
