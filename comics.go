@@ -287,15 +287,18 @@ func downloadFeeds(config []*ComicMetaData) {
 
 // parseConfig reads a configuration file specifying RSS feeds and
 // constructs ComicMetaData structs to represent them.
-func parseConfig(configFileName string) []*ComicMetaData {
-	data, _ := ioutil.ReadFile(configFileName)
+func parseConfig(configFileName string) ([]*ComicMetaData, error) {
+	data, err := ioutil.ReadFile(configFileName)
+	if err != nil {
+		return []*ComicMetaData{}, fmt.Errorf("error opening '%v': %v", configFileName, err)
+	}
 	var config []ComicMetaData
 	json.Unmarshal(data, &config)
 	var ptrs []*ComicMetaData
 	for i, _ := range config {
 		ptrs = append(ptrs, &config[i])
 	}
-	return ptrs
+	return ptrs, nil
 }
 
 // quickSort is abasic quicksort algorithm for sorting a ComicSeries by
@@ -367,7 +370,8 @@ func main() {
 	tmpl, err := template.New("comics").Funcs(funcMap).Parse(tmplString)
 	check(err)
 
-	metaData := parseConfig("config.json")
+	metaData, err := parseConfig("config.json")
+	check(err)
 
 	downloadFeeds(metaData)
 	comics := parseFeeds(metaData)
