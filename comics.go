@@ -258,6 +258,7 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 func parseFeeds(metaData []*ComicMetadata) (comics []ComicSeries) {
 	for _, md := range metaData {
 		if md.RSSFeed == nil {
+			fmt.Fprintf(os.Stderr, "no RSS feed downloaded for %v", md.URL)
 			continue // TODO(aoeu): Is there a better approach?
 		}
 		var comic ComicSeries
