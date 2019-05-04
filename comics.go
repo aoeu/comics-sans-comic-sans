@@ -106,7 +106,7 @@ type ComicMetaData struct {
 // downloadFeed requests an RSS feed with a URL and stores response as a field.
 func (c *ComicMetaData) downloadFeed(wg *sync.WaitGroup) {
 	defer wg.Done()
-	resp, err := download(c.URL, "2s") // TODO(aoeu): Make timeout configurable?
+	resp, err := download(c.URL, "5s") // TODO(aoeu): Make timeout configurable?
 	if err != nil {
 		log.Println("Did not receive HTTP GET response: ", err)
 		return
