@@ -316,10 +316,10 @@ func parseConfig(filepath string) (out []*ComicMetadata, err error) {
 
 // quickSort is abasic quicksort algorithm for sorting a ComicSeries by
 // chronological order of the publication date.
-func quickSort(series []ComicSeries) []ComicSeries {
-	length := len(series)
+func quickSort(in []ComicSeries) (out []ComicSeries) {
+	length := len(in)
 	if length < 2 {
-		return series
+		return in
 	}
 	defer func() {
 		if err := recover(); err != nil {
@@ -328,24 +328,24 @@ func quickSort(series []ComicSeries) []ComicSeries {
 	}()
 	pivot := (length / 2) - 1
 	var lesser, greater []ComicSeries
-	for index, _ := range series {
+	for index, _ := range in {
 		if index == pivot {
 			continue
 		}
-		time1 := series[index].Comics[0].UnixDate
-		time2 := series[pivot].Comics[0].UnixDate
+		time1 := in[index].Comics[0].UnixDate
+		time2 := in[pivot].Comics[0].UnixDate
 		if time1 <= time2 {
-			lesser = append(lesser, series[index])
+			lesser = append(lesser, in[index])
 		} else {
-			greater = append(greater, series[index])
+			greater = append(greater, in[index])
 		}
 	}
 	lesserLen := len(lesser)
-	result := make([]ComicSeries, lesserLen+1+len(greater))
-	copy(result, quickSort(lesser))
-	copy(result[lesserLen:], series[pivot:pivot+1])
-	copy(result[lesserLen+1:], quickSort(greater))
-	return result
+	out = make([]ComicSeries, lesserLen+1+len(greater))
+	copy(out, quickSort(lesser))
+	copy(out[lesserLen:], in[pivot:pivot+1])
+	copy(out[lesserLen+1:], quickSort(greater))
+	return out
 }
 
 // reverse reverses the sort order of a ComicSeries.
