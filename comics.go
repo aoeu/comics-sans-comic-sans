@@ -233,11 +233,12 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 	if commentAttrName == "" {
 		commentAttrName = "alt"
 	}
-	series := new(ComicSeries)
-	series.SeriesTitle = feed.Channel.Title
-	series.SiteURL = feed.Channel.Link
-	series.Description = feed.Channel.Description
-	series.Index = 0
+	series := &ComicSeries{
+		SeriesTitle: feed.Channel.Title,
+		SiteURL:     feed.Channel.Link,
+		Description: feed.Channel.Description,
+		Index:       0,
+	}
 	lastBuildDate := feed.Channel.LastBuildDate
 	var comics []Comic
 	for _, item := range feed.Channel.Items {
