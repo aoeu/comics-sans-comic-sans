@@ -165,9 +165,9 @@ func download(url, timeoutLen string) (*http.Response, error) {
 	}
 }
 
-// parseDateData calculates, formats, and returns time information about an
+// parseDate calculates, formats, and returns time information about an
 // RSS "pubDate" node.
-func parseDateData(pubDate string) (
+func parseDate(pubDate string) (
 	newPubDate string, unixDate int64, pubMsg string, err error) {
 	dateTime, err := time.Parse(time.RFC1123Z, pubDate)
 	if err != nil {
@@ -206,7 +206,7 @@ func lastUpdate(then, now int64) (lastUpdate string) {
 func parseComic(item Item, commentAttrName string) (c Comic, err error) {
 	c = Comic{Title: item.Title, Link: item.Link}
 	// TODO: Why ignore error?
-	c.Date, c.UnixDate, c.PubMsg, _ = parseDateData(item.PubDate)
+	c.Date, c.UnixDate, c.PubMsg, _ = parseDate(item.PubDate)
 	//item.Description = html.EscapeString(item.Description)
 	node, err := html.Parse(strings.NewReader(item.Description))
 	if err != nil {
@@ -248,7 +248,7 @@ func parseComicSeries(feed *RSS, commentAttrName string) (ComicSeries, error) {
 			continue
 		}
 		if comic.UnixDate < 0 { // Hack: Some comics don't have pubDate on items.
-			comic.Date, comic.UnixDate, comic.PubMsg, _ = parseDateData(lastBuildDate)
+			comic.Date, comic.UnixDate, comic.PubMsg, _ = parseDate(lastBuildDate)
 		}
 		comics = append(comics, comic)
 	}
